@@ -96,7 +96,7 @@ $ zcat 2018-07-10.log.gz | grep "R A" | grep dyndns.org | grep -v -E " -$"
 ## Installation
 1) `sudo apt-get install python python-pcapy python-dpkt`
 2) `cd /opt`
-3) `git clone https://github.com/stamparm/dnslog.git`
+3) `sudo git clone https://github.com/stamparm/dnslog.git`
 4) `sudo crontab -e`  # append the following line
 
 `*/1 * * * * if [ -n "$(ps -ef | grep -v grep | grep 'dnslog.py')" ]; then : ; else python /opt/dnslog/dnslog.py; fi`
