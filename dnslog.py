@@ -40,6 +40,7 @@ _counter = 0
 _datalink = None
 _log_path = None
 _log_handle = None
+_flush_last = None
 
 def get_log_handle(sec):
     global _log_path
@@ -59,6 +60,7 @@ def get_log_handle(sec):
 
 def log_write(sec, text):
     global _counter
+    global _flush_last
 
     _counter += 1
 
@@ -73,6 +75,10 @@ def log_write(sec, text):
         sys.stdout.flush()
 
     handle.write(text)
+
+    if _flush_last is None or (time.time() - _flush_last) >= 60:
+        handle.flush()
+        _flush_last = time.time()
 
 def safe_csv_value(value):
     retval = str(value or '-')
