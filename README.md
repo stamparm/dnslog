@@ -20,11 +20,14 @@ $ zcat 2018-07-12.log.gz | head
 
 ## Prerequisites
 
-`python2`, `pcapy`, `dpkt`
+* Linux (recommended: Debian/Ubuntu)
+* `python` (version 2.x)
+* `pcapy`
+* `dpkt`
 
 ## Installation
-1) `cd /opt`
-2) `sudo apt-get install python python-pcapy python-dpkt`
+1) `sudo apt-get install python python-pcapy python-dpkt`
+2) `cd /opt`
 3) `git clone https://github.com/stamparm/dnslog.git`
 4) `sudo crontab -e  # append the following line`
 
