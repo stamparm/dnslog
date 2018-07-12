@@ -130,7 +130,7 @@ def main():
             try:
                 os.makedirs(directory)
             except:
-                exit("[x] not enough permissions to create the directory '%s'. Please rerun with sudo privileges" % directory)
+                exit("[x] not enough permissions to create the directory '%s'. Please rerun with sudo/root privileges" % directory)
 
     print "[o] log directory '%s'" % LOG_DIRECTORY
 
@@ -140,23 +140,12 @@ def main():
         _cap = pcapy.open_live(CAPTURE_INTERFACE, SNAP_LEN, PROMISCUOUS_MODE, CAPTURE_TIMEOUT)
         _cap.setfilter(CAPTURE_FILTER)
         _datalink = _cap.datalink()
-
-        while True:
-            try:
-                (header, packet) = _cap.next()
-                if header is None:
-                    break
-                packet_handler(header, packet)
-            except (pcapy.PcapError, socket.timeout):
-                time.sleep(CAPTURE_TIMEOUT / 2. / 1000.)  # ms to secs
-            except KeyboardInterrupt:
-                raise
-
+        _cap.loop(-1, packet_handler)
     except KeyboardInterrupt:
         print "[!] Ctrl-C pressed"
     except pcapy.PcapError, ex:
         if "permission" in str(ex):
-            exit("[x] not enough permissions to capture traffic. Please rerun with sudo privileges")
+            exit("[x] not enough permissions to capture traffic. Please rerun with sudo/root privileges")
         else:
             raise
 
