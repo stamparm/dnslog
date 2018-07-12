@@ -2,7 +2,7 @@
 
 ## Information
 
-Minimalistic DNS logging application. Captures all DNS traffic and stores its textual presentation to the `/var/log/dnslog/<date>.log.gz`.
+Minimalistic DNS logging application. Captures all DNS traffic and stores its textual presentation to the `/var/log/dnslog/<date>.log.gz`. Created for the network forensics purposes.
 
 ```
 $ zcat 2018-07-12.log.gz | head
