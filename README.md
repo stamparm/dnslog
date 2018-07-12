@@ -5,7 +5,7 @@
 Minimalistic DNS logging tool. Captures all DNS traffic and stores its textual presentation (in compressed form) to the `/var/log/dnslog/<date>.log.gz`. Created for the network forensics purposes.
 
 ```
-$ zcat 2018-07-12.log.gz | head
+$ zcat /var/log/dnslog/2018-07-12.log.gz | head
 00:00:00.001595 R A 192.168.107.168 192.168.110.233 ocsp.verisign.com 23.37.43.27
 00:00:00.001949 Q PTR 192.168.107.146 199.253.182.182 2.6.e.f.a.b.e.f.f.f.6.5.0.5.2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa ?
 00:00:00.002314 R AAAA 37.48.122.173 194.5.87.10 nsres1.shockmedia.nl -
@@ -23,7 +23,7 @@ $ zcat 2018-07-12.log.gz | head
 * Find all DNS (`A`) requests for (malicious) domain `a3ax.dip.jp` on date `2018-07-10`:
 
 ```
-$ zcat 2018-07-10.log.gz | grep "Q A" | grep a3ax.dip.jp
+$ zcat /var/log/dnslog/2018-07-10.log.gz | grep "Q A" | grep a3ax.dip.jp
 07:35:55.505057 Q A 192.168.108.98 192.168.107.168 a3ax.dip.jp ?
 07:35:55.506583 Q A 192.168.107.146 27.120.88.165 a3ax.dip.jp ?
 07:35:55.882518 Q A 192.168.107.146 27.120.88.165 a3ax.dip.jp ?
@@ -51,7 +51,7 @@ $ zcat 2018-07-10.log.gz | grep "Q A" | grep a3ax.dip.jp
 * Find all successful DNS (`A`) replies for dynamic domains `dyndns.org` on date `2018-07-10`:
 
 ```
-$ zcat 2018-07-10.log.gz | grep "R A" | grep dyndns.org | grep -v -E " -$"
+$ zcat /var/log/dnslog/2018-07-10.log.gz | grep "R A" | grep dyndns.org | grep -v -E " -$"
 00:03:51.983455 R A 192.168.107.168 192.168.110.232 members.dyndns.org 162.88.175.12
 00:15:18.533338 R A 192.168.107.168 192.168.110.232 members.dyndns.org 162.88.175.12
 00:26:33.771922 R A 192.168.107.168 192.168.110.232 members.dyndns.org 162.88.175.12
