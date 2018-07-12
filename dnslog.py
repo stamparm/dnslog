@@ -30,6 +30,7 @@ CAPTURE_FILTER = "udp port 53"
 SNAP_LEN = 65536
 PROMISCUOUS_MODE = True
 CAPTURE_TIMEOUT = 100  # ms
+FLUSH_LOG_TIMEOUT = 60
 SHOW_TRACE = False
 CONSOLE_OUTPUT = False
 SHOW_COUNTER = False
@@ -76,7 +77,7 @@ def log_write(sec, text):
 
     handle.write(text)
 
-    if _flush_last is None or (time.time() - _flush_last) >= 60:
+    if _flush_last is None or (time.time() - _flush_last) >= FLUSH_LOG_TIMEOUT:
         handle.flush()
         _flush_last = time.time()
 
