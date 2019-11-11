@@ -1,7 +1,7 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 """
-Copyright (c) 2018-2337 Miroslav Stampar
+Copyright (c) 2018-2019 Miroslav Stampar
 See the file 'LICENSE' for copying permission
 """
 
@@ -75,7 +75,7 @@ def log_write(sec, text):
         sys.stdout.write("\r%d" % _counter)
         sys.stdout.flush()
 
-    handle.write(text)
+    handle.write(text.encode("utf8") if hasattr(text, "encode") else text)
 
     if _flush_last is None or (time.time() - _flush_last) >= FLUSH_LOG_TIMEOUT:
         handle.flush()
@@ -139,9 +139,9 @@ def main():
             except:
                 exit("[x] not enough permissions to create the directory '%s'. Please rerun with sudo/root privileges" % directory)
 
-    print "[o] log directory '%s'" % LOG_DIRECTORY
+    print("[o] log directory '%s'" % LOG_DIRECTORY)
 
-    print "[i] running..."
+    print("[i] running...")
 
     try:
         _cap = pcapy.open_live(CAPTURE_INTERFACE, SNAP_LEN, PROMISCUOUS_MODE, CAPTURE_TIMEOUT)
@@ -149,8 +149,8 @@ def main():
         _datalink = _cap.datalink()
         _cap.loop(-1, packet_handler)
     except KeyboardInterrupt:
-        print "[!] Ctrl-C pressed"
-    except pcapy.PcapError, ex:
+        print("[!] Ctrl-C pressed")
+    except pcapy.PcapError as ex:
         if "permission" in str(ex):
             exit("[x] not enough permissions to capture traffic. Please rerun with sudo/root privileges")
         else:
@@ -159,8 +159,8 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (SystemExit, Exception), ex:
-        print ex
+    except (SystemExit, Exception) as ex:
+        print(ex)
     finally:
         if _log_handle:
             try:

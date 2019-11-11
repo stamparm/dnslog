@@ -89,7 +89,7 @@ $ zcat /var/log/dnslog/2018-07-10.log.gz | grep "R A" | grep dyndns.org | grep -
 ## Prerequisites
 
 * Linux (recommended: Debian/Ubuntu)
-* `python` (version 2.x)
+* `python` (version 2.x or 3.x)
 * `pcapy`
 * `dpkt`
 
