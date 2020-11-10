@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 
 """
-Copyright (c) 2018-2019 Miroslav Stampar
+Copyright (c) 2018-2020 Miroslav Stampar
 See the file 'LICENSE' for copying permission
 """
 
 import gzip
+import io
 import os
 import re
+import shutil
 import socket
 import stat
 import sys
@@ -43,6 +45,26 @@ _log_path = None
 _log_handle = None
 _flush_last = None
 
+def is_corrupted(path):
+    retval = True
+
+    try:
+        with gzip.open(path) as f:
+            if f.seekable():
+                try:
+                    f.seek(0, io.SEEK_END)
+                except ValueError:  # Python2
+                    while True:
+                        _ = f.read(1024)
+                        if not _:
+                            break
+
+                retval = False
+    except:
+        pass
+
+    return retval
+
 def get_log_handle(sec):
     global _log_path
     global _log_handle
@@ -51,9 +73,20 @@ def get_log_handle(sec):
     _ = os.path.join(LOG_DIRECTORY, "%d-%02d-%02d.log.gz" % (localtime.tm_year, localtime.tm_mon, localtime.tm_mday))
 
     if _ != _log_path:
+        if os.path.exists(_) and is_corrupted(_):
+            i = 1
+            while True:
+                candidate = _.replace(".log.gz", ".log.%d.gz" % i)
+                if not os.path.exists(candidate):
+                    shutil.move(_, candidate)
+                    break
+                else:
+                    i += 1
+
         if not os.path.exists(_):
             open(_, "w+").close()
             os.chmod(_, DEFAULT_LOG_PERMISSIONS)
+
         _log_path = _
         _log_handle = gzip.open(_log_path, "ab")
 
