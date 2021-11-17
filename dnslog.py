@@ -25,6 +25,7 @@ except ImportError:
     exit("[x] sudo apt-get install python-pcapy python-dpkt")
 
 NAME = "DNSlog"
+VERSION = "1.0.2"
 LOG_DIRECTORY = "/var/log/%s" % NAME.lower()
 DEFAULT_LOG_PERMISSIONS = stat.S_IREAD | stat.S_IWRITE | stat.S_IRGRP | stat.S_IROTH
 CAPTURE_INTERFACE = "any"
@@ -180,7 +181,12 @@ def main():
         _cap = pcapy.open_live(CAPTURE_INTERFACE, SNAP_LEN, PROMISCUOUS_MODE, CAPTURE_TIMEOUT)
         _cap.setfilter(CAPTURE_FILTER)
         _datalink = _cap.datalink()
-        _cap.loop(-1, packet_handler)
+
+        while True:
+            (header, packet) = _cap.next()
+            if header is not None:
+                packet_handler(header, packet)
+#        _cap.loop(-1, packet_handler)
     except KeyboardInterrupt:
         print("[!] Ctrl-C pressed")
     except pcapy.PcapError as ex:
