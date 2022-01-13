@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Copyright (c) 2018-2021 Miroslav Stampar
+Copyright (c) 2018-2022 Miroslav Stampar
 See the file 'LICENSE' for copying permission
 """
 
